@@ -18,28 +18,38 @@ A small **Spring Cloud** microservices ecosystem built with **Spring Boot**. It 
 
 > Repo language: Java (100%).  
 
-##  Architecture (high level)
-                       +------------------+
-                       | spring-cloud-    |
-                       | config-server    |
-                       +---------+--------+
-                                 |
-                     (bootstrap / application config)
-                                 |
-+-------------------+   register |      +--------------------+
-| currency-exchange |<---------->|      | naming-server      |
-|  JPA + H2         |   discover |      | (Eureka)           |
-+---------+---------+            |      +--------------------+
-          ^                      |
-          | OpenFeign / REST     |
-+---------+---------+            |
-| currency-conv.    |<-----------+
-|  (client)         |                 +--------------------+
-+---------+---------+   route through | api-gateway        |
-          ^                           | (Spring Cloud GW)  |
-          | HTTP                      +--------------------+
-          |
-      Consumers (Postman / UI / curl)
+## Architecture (high level)
+
+            +------------------+
+            |  spring-cloud-   |
+            |  config-server   |
+            +---------+--------+
+                      |
+        (bootstrap / application config)
+                      |
+      +-------------------------------+        +-----------------------------+
+      |     register                  |        |         discover            |
+      |  +-------------------------+  |        |  +-----------------------+  |
+      |  | currency-exchange       |<----------->| naming-server (Eureka) |  |
+      |  | JPA + H2                |  |        |  +-----------------------+  |
+      |  +-------------------------+  |        |                             |
+      |               ^               |        |                             |
+      |               | OpenFeign/REST|        |                             |
+      |  +-------------------------+  |        |  +-----------------------+  |
+      |  | currency-conv. (client) |<----------------------------------------+
+      |  +-------------------------+           |                             |
+      +-------------------------------+        |                             |
+                      ^                        |                             |
+                      | route through          |                             |
+                      |                        v                             |
+            +-----------------------------+         (Spring Cloud GW)        |
+            |        api-gateway          |-----------------------------------+
+            +-----------------------------+
+
+                     ^  HTTP
+                     |
+          Consumers (Postman / UI / curl)
+
 
 # Getting Started
 
